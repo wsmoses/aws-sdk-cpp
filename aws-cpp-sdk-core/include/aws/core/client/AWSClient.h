@@ -244,6 +244,7 @@ namespace Aws
                 return m_errorMarshaller;
             }
 
+        public:
             /**
              * Gets the corresponding signer from the signers map by name.
              */

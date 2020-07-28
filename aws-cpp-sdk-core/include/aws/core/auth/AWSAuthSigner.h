@@ -123,6 +123,14 @@ namespace Aws
             * Using m_serviceName by default if parameter serviceName is nullptr.
             */
             virtual bool PresignRequest(Aws::Http::HttpRequest& request, const char* region, const char* serviceName, long long expirationInSeconds = 0) const = 0;
+            
+            /**
+            * Generates a signed Uri using the injected signer. for the supplied uri and http method, url escape scheme region, and service name. expirationInSeconds defaults
+            * to 0 which is the default 7 days.
+            * Using m_region by default if parameter region is nullptr.
+            * Using m_serviceName by default if parameter serviceName is nullptr.
+            */
+            virtual bool PresignRequest(Aws::Http::HttpRequest& request, bool urlEscape, const char* region, const char* serviceName, long long expirationInSeconds = 0) const = 0;
 
             /**
              * Return the signer's name
@@ -246,6 +254,7 @@ namespace Aws
             * Using m_serviceName by default if parameter serviceName is nullptr.
             */
             bool PresignRequest(Aws::Http::HttpRequest& request, const char* region, const char* serviceName, long long expirationInSeconds = 0) const override;
+            bool PresignRequest(Aws::Http::HttpRequest& request, bool, const char* region, const char* serviceName, long long expirationInSeconds = 0) const override;
 
             Aws::String GetServiceName() const { return m_serviceName; }
             Aws::String GetRegion() const { return m_region; }
@@ -328,6 +337,7 @@ namespace Aws
              * Do nothing
              */
             bool PresignRequest(Aws::Http::HttpRequest&, const char*, const char*, long long) const override { return false; }
+            bool PresignRequest(Aws::Http::HttpRequest&, bool, const char*, const char*, long long) const override { return false; }
 
             bool ShouldSignHeader(const Aws::String& header) const;
         private:
@@ -389,6 +399,7 @@ namespace Aws
              * Do nothing
              */
             bool PresignRequest(Aws::Http::HttpRequest&, const char*, const char*, long long) const override { return false; }
+            bool PresignRequest(Aws::Http::HttpRequest&, bool, const char*, const char*, long long) const override { return false; }
         };
 
     } // namespace Client

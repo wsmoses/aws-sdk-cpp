@@ -304,6 +304,11 @@ bool AWSAuthV4Signer::PresignRequest(Aws::Http::HttpRequest& request, const char
 
 bool AWSAuthV4Signer::PresignRequest(Aws::Http::HttpRequest& request, const char* region, const char* serviceName, long long expirationTimeInSeconds) const
 {
+    return PresignRequest(request, m_urlEscapePath, region, serviceName, expirationTimeInSeconds);
+}
+
+bool AWSAuthV4Signer::PresignRequest(Aws::Http::HttpRequest& request, bool urlEscape, const char* region, const char* serviceName, long long expirationTimeInSeconds) const
+{
     AWSCredentials credentials = m_credentialsProvider->GetAWSCredentials();
 
     //don't sign anonymous requests
@@ -366,7 +371,7 @@ bool AWSAuthV4Signer::PresignRequest(Aws::Http::HttpRequest& request, const char
     request.SetSigningRegion(signingRegion);
 
     //generate generalized canonicalized request string.
-    Aws::String canonicalRequestString = CanonicalizeRequestSigningString(request, m_urlEscapePath);
+    Aws::String canonicalRequestString = CanonicalizeRequestSigningString(request, urlEscape);
 
     //append v4 stuff to the canonical request string.
     canonicalRequestString.append(canonicalHeadersString);
